@@ -13,27 +13,27 @@ export function DashboardGrid() {
 
       <DashboardCard
         title="Total de Alunos"
-        value={328}
+        value={0}
         icon={GraduationCap}
       />
 
       <DashboardCard
         title="Professores"
-        value={27}
+        value={0}
         icon={Users}
         color="bg-success"
       />
 
       <DashboardCard
         title="Cursos"
-        value={14}
+        value={0}
         icon={BookOpen}
         color="bg-warning"
       />
 
       <DashboardCard
         title="Matrículas"
-        value={521}
+        value={0}
         icon={ClipboardList}
         color="bg-info"
       />

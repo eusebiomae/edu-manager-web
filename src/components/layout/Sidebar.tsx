@@ -19,37 +19,38 @@ export function Sidebar() {
   return (
     <>
       {mobileOpen && (
-
-          <div
-              onClick={closeMobile}
-              className="fixed inset-0 z-40 bg-black/40 md:hidden"
-          />
-
+        <div
+          onClick={closeMobile}
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+        />
       )}
 
       <aside
-          className={clsx(
+        className={clsx(
+          "border-r bg-card transition-all duration-300",
 
-              "border-r bg-card transition-all duration-300",
+          "md:relative",
 
-              "md:relative",
+          "fixed left-0 top-0 z-50 h-screen",
 
-              "fixed left-0 top-0 z-50 h-screen",
+          mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
 
-              mobileOpen
-                  ? "translate-x-0"
-                  : "-translate-x-full md:translate-x-0",
+          collapsed ? "md:w-20" : "md:w-64",
 
-              collapsed
-                  ? "md:w-20"
-                  : "md:w-64",
-
-              "w-64"
-
-          )}
+          "w-64",
+        )}
       >
         <div className="flex items-center justify-center h-16">
-          {collapsed ? <span className="text-2xl font-bold">E</span> : <Logo />}
+          {collapsed ? (
+            <span className="text-2xl font-bold">
+              {" "}
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
+                <GraduationCap size={24} />
+              </div>
+            </span>
+          ) : (
+            <Logo />
+          )}
         </div>
 
         <nav className="flex flex-1 flex-col gap-2 px-4">
@@ -63,7 +64,11 @@ export function Sidebar() {
         </nav>
 
         <div className="border-t p-4">
-          <NavItem href="/configuracoes" label="Configurações" icon={Settings} />
+          <NavItem
+            href="/configuracoes"
+            label="Configurações"
+            icon={Settings}
+          />
         </div>
       </aside>
     </>
