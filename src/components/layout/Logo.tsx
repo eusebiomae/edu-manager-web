@@ -12,7 +12,7 @@ export function Logo() {
           EduManager
         </h1>
 
-        <p className="text-xs text-muted">
+        <p className="text-xs text-muted-foreground">
           ERP Escolar
         </p>
       </div>

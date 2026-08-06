@@ -5,7 +5,7 @@ export default function ProfessoresPage() {
         Professores
       </h1>
 
-      <p className="mt-2 text-muted">
+      <p className="mt-2 text-muted-foreground">
         Gestão de professores.
       </p>
     </>

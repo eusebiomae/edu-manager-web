@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   LayoutDashboard,
@@ -6,55 +6,66 @@ import {
   BookOpen,
   Users,
   Settings,
-} from 'lucide-react';
+} from "lucide-react";
 
-import { Logo } from './Logo';
-import { NavItem } from './NavItem';
+import { useSidebar } from "@/context/sidebar-context";
+import clsx from "clsx";
+import { Logo } from "./Logo";
+import { NavItem } from "./NavItem";
 
 export function Sidebar() {
+  const { collapsed, mobileOpen, closeMobile } = useSidebar();
+
   return (
-    <aside className="flex h-screen w-72 flex-col border-r bg-card">
+    <>
+      {mobileOpen && (
 
-      <Logo />
+          <div
+              onClick={closeMobile}
+              className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          />
 
-      <nav className="flex flex-1 flex-col gap-2 px-4">
+      )}
 
-        <NavItem
-          href="/dashboard"
-          label="Dashboard"
-          icon={LayoutDashboard}
-        />
+      <aside
+          className={clsx(
 
-        <NavItem
-          href="/alunos"
-          label="Alunos"
-          icon={GraduationCap}
-        />
+              "border-r bg-card transition-all duration-300",
 
-        <NavItem
-          href="/cursos"
-          label="Cursos"
-          icon={BookOpen}
-        />
+              "md:relative",
 
-        <NavItem
-          href="/professores"
-          label="Professores"
-          icon={Users}
-        />
+              "fixed left-0 top-0 z-50 h-screen",
 
-      </nav>
+              mobileOpen
+                  ? "translate-x-0"
+                  : "-translate-x-full md:translate-x-0",
 
-      <div className="border-t p-4">
+              collapsed
+                  ? "md:w-20"
+                  : "md:w-64",
 
-        <NavItem
-          href="/configuracoes"
-          label="Configurações"
-          icon={Settings}
-        />
+              "w-64"
 
-      </div>
+          )}
+      >
+        <div className="flex items-center justify-center h-16">
+          {collapsed ? <span className="text-2xl font-bold">E</span> : <Logo />}
+        </div>
 
-    </aside>
+        <nav className="flex flex-1 flex-col gap-2 px-4">
+          <NavItem href="/dashboard" label="Dashboard" icon={LayoutDashboard} />
+
+          <NavItem href="/alunos" label="Alunos" icon={GraduationCap} />
+
+          <NavItem href="/cursos" label="Cursos" icon={BookOpen} />
+
+          <NavItem href="/professores" label="Professores" icon={Users} />
+        </nav>
+
+        <div className="border-t p-4">
+          <NavItem href="/configuracoes" label="Configurações" icon={Settings} />
+        </div>
+      </aside>
+    </>
   );
 }

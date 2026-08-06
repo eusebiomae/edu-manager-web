@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LucideIcon } from "lucide-react";
 import clsx from "clsx";
+import { useSidebar } from "@/context/sidebar-context";
 
 interface NavItemProps {
   href: string;
@@ -16,9 +17,13 @@ export function NavItem({ href, label, icon: Icon }: NavItemProps) {
 
   const active = pathname === href;
 
+  const { collapsed, closeMobile  } = useSidebar();
+
+
   return (
     <Link
       href={href}
+      onClick={closeMobile}
       className={clsx(
         "flex items-center gap-3 rounded-lg px-4 py-3 font-medium transition-colors",
         active
@@ -28,7 +33,7 @@ export function NavItem({ href, label, icon: Icon }: NavItemProps) {
     >
       <Icon size={20} />
 
-      <span className="font-medium">{label}</span>
+      {!collapsed && <span>{label}</span>}
     </Link>
   );
 }

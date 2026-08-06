@@ -5,7 +5,7 @@ export default function ConfiguracoesPage() {
         Configurações
       </h1>
 
-      <p className="mt-2 text-muted">
+      <p className="mt-2 text-muted-foreground">
         Configurações do sistema.
       </p>
     </>

@@ -1,16 +1,22 @@
-'use client';
+"use client";
 
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/lib/queryClient';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "./ThemeProvider";
+import { ReactNode, useState } from "react";
+import { SidebarProvider } from "@/context/sidebar-context";
 
-interface ProvidersProps {
-  children: React.ReactNode;
+interface Props {
+  children: ReactNode;
 }
 
-export default function Providers({ children }: ProvidersProps) {
+export default function Providers({ children }: Props) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <SidebarProvider>{children}</SidebarProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
