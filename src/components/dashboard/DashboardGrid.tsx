@@ -1,19 +1,20 @@
-import {
-  GraduationCap,
-  Users,
-  BookOpen,
-  ClipboardList,
-} from "lucide-react";
+"use client";
+
+import { GraduationCap, Users, BookOpen, ClipboardList } from "lucide-react";
 
 import { DashboardCard } from "./DashboardCard";
+import { useAlunos } from "@/hooks/useAlunos";
 
 export function DashboardGrid() {
+  const { data: alunos, isLoading } = useAlunos();
+  const totalAlunos = alunos?.length ?? 0;
+
   return (
     <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
 
       <DashboardCard
         title="Total de Alunos"
-        value={0}
+        value={isLoading ? "..." : totalAlunos}
         icon={GraduationCap}
       />
 
@@ -37,7 +38,6 @@ export function DashboardGrid() {
         icon={ClipboardList}
         color="bg-info"
       />
-
     </section>
   );
 }
