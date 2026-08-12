@@ -14,6 +14,8 @@ import { Aluno } from "@/types";
 import { Button } from "@/components/ui/button";
 
 import { Plus } from "lucide-react";
+import { ConfirmDialog } from "@/components/common/ConfirmDialog";
+import { alerts } from "@/lib/alerts";
 
 export default function AlunosPage() {
   const { data: alunos, isLoading, isError, error } = useAlunos();
@@ -28,20 +30,31 @@ export default function AlunosPage() {
     console.log("Editar aluno:", aluno);
   }, []);
 
-  const handleDelete = useCallback(
-    (aluno: Aluno) => {
-      const confirmed = window.confirm(
-        `Deseja realmente excluir o aluno "${aluno.nome}"?`,
-      );
+  const [alunoToDelete, setAlunoToDelete] = useState<Aluno | null>(null);
 
-      if (!confirmed) {
-        return;
-      }
+  const handleDelete = useCallback((aluno: Aluno) => {
+    setAlunoToDelete(aluno);
+  }, []);
 
-      deleteAluno.mutate(aluno.id);
-    },
-    [deleteAluno],
-  );
+  const handleConfirmDelete = useCallback(() => {
+    if (!alunoToDelete) {
+      return;
+    }
+
+    deleteAluno.mutate(alunoToDelete.id, {
+      onSuccess: async () => {
+        setAlunoToDelete(null);
+
+        await alerts.success(
+          `Aluno "${alunoToDelete.nome}" excluído com sucesso.`,
+        );
+      },
+
+      onError: () => {
+        alerts.error("Não foi possível excluir o aluno.");
+      },
+    });
+  }, [alunoToDelete, deleteAluno]);
 
   const columns = useMemo(
     () =>
@@ -95,6 +108,25 @@ export default function AlunosPage() {
           searchPlaceholder="Pesquisar aluno..."
         />
       )}
+
+      <ConfirmDialog
+        open={!!alunoToDelete}
+        title="Excluir aluno"
+        description={
+          alunoToDelete
+            ? `Deseja realmente excluir o aluno "${alunoToDelete.nome}"? Esta ação não poderá ser desfeita.`
+            : ""
+        }
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        loading={deleteAluno.isPending}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          if (!deleteAluno.isPending) {
+            setAlunoToDelete(null);
+          }
+        }}
+      />
     </div>
   );
 }

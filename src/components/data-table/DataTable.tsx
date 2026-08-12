@@ -10,6 +10,7 @@ import {
   SortingState,
   VisibilityState,
   useReactTable,
+  DisplayColumnDef,
 } from "@tanstack/react-table";
 
 import {
@@ -34,6 +35,7 @@ import {
 import { ChevronLeft, ChevronRight, Columns3 } from "lucide-react";
 
 import { useState } from "react";
+import { Checkbox } from "../ui/checkbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,9 +55,37 @@ export function DataTable<TData, TValue>({
 
   const [rowSelection, setRowSelection] = useState({});
 
+  const selectionColumn: DisplayColumnDef<TData> = {
+    id: "select",
+
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Selecionar todos"
+      />
+    ),
+
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Selecionar aluno"
+      />
+    ),
+
+    enableSorting: false,
+    enableHiding: false,
+  };
+
+  const tableColumns = [selectionColumn, ...columns];
+
   const table = useReactTable({
     data,
-    columns,
+    columns: tableColumns,
 
     state: {
       sorting,
@@ -157,7 +187,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={tableColumns.length}
                   className="h-24 text-center"
                 >
                   Nenhum aluno encontrado.
